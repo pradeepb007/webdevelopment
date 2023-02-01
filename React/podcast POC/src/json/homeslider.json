@@ -1,0 +1,22 @@
+[
+    {
+        "id": 1,
+        "name" : "Women-in-technology",
+        "imageURL": "assets/images/Women-in-technology.jpg"
+    },
+    {
+        "id": 2,
+        "name" : "banner1",
+        "imageURL": "assets/images/banner1.jpg"
+    },
+    {
+        "id": 3,
+        "name" : "banner2",
+        "imageURL": "assets/images/banner2.jpg"
+    },
+    {
+        "id": 4,
+        "name" : "banner3",
+        "imageURL": "assets/images/banner3.jpg"
+    }
+]
