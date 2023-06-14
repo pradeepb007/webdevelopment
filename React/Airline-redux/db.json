@@ -1,0 +1,110 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "admin",
+      "password": "admin",
+      "role": "admin"
+    },
+    {
+      "id": 2,
+      "username": "staff",
+      "password": "staff",
+      "role": "staff"
+    }
+  ],
+  "flights": [
+    {
+      "id": 1,
+      "flightNo": "FA-2491",
+      "airline": "IndiGo",
+      "source": "Hyderabad",
+      "destination": "Bangalore",
+      "depatureTime": "2023-05-24T18:25:43.511Z",
+      "arrivalTime": "2023-05-24T22:15:13.511Z",
+      "ancillaryServices": ["vouchers", "Tv", "merchandise"],
+      "specialMeals": ["Veg Meal Box", "Non-Veg Meal Box", "Sandwich"],
+      "inFlightShop": ["iphone earbuds", "HeadSet", "ipod"]
+    },
+    {
+      "id": 2,
+      "flightNo": "FA-2492",
+      "airline": "SpiceJet",
+      "source": "Delhi",
+      "destination": "Chennai",
+      "depatureTime": "2023-06-03T20:10:43.511Z",
+      "arrivalTime": "2023-06-03T23:25:43.511Z",
+      "ancillaryServices": ["vouchers", "Tv", "merchandise"],
+      "specialMeals": ["Veg Meal Box", "Non-Veg Meal Box", "Sandwich"],
+      "inFlightShop": ["iphone earbuds", "HeadSet", "ipod"]
+    },
+    {
+      "id": 3,
+      "flightNo": "FA-2493",
+      "airline": "AirIndia",
+      "source": "Mumbai",
+      "destination": "Hyderabad",
+      "depatureTime": "2023-05-15T05:30:43.511Z",
+      "arrivalTime": "2023-05-15T08:25:43.511Z",
+      "ancillaryServices": ["vouchers", "Tv", "merchandise"],
+      "specialMeals": ["Veg Meal Box", "Non-Veg Meal Box", "Sandwich"],
+      "inFlightShop": ["iphone earbuds", "HeadSet", "ipod"]
+    },
+    {
+      "id": 4,
+      "flightNo": "FA-2494",
+      "airline": "JetAirways",
+      "source": "Vizag",
+      "destination": "Pune",
+      "depatureTime": "2023-05-16T08:10:43.511Z",
+      "arrivalTime": "2025-05-16T13:18:43.511Z",
+      "ancillaryServices": ["vouchers", "Tv", "merchandise"],
+      "specialMeals": ["Veg Meal Box", "Non-Veg Meal Box", "Sandwich"],
+      "inFlightShop": ["iphone earbuds", "HeadSet", "ipod"]
+    },
+    {
+      "id": 5,
+      "flightNo": "FA-2495",
+      "airline": "AirAsia",
+      "source": "Bangalore",
+      "destination": "Delhi",
+      "depatureTime": "2023-05-20T14:15:43.511Z",
+      "arrivalTime": "2023-05-20T18:25:43.511Z",
+      "ancillaryServices": ["vouchers", "Tv", "merchandise"],
+      "specialMeals": ["Veg Meal Box", "Non-Veg Meal Box", "Sandwich"],
+      "inFlightShop": ["iphone earbuds", "HeadSet", "ipod"]
+    }
+  ],
+  "passengers": [
+    {
+      "id": 1,
+      "name": "Pradeep",
+      "passport": "P001",
+      "dateOfBirth": "1996-03-22",
+      "address": "Hyderabad",
+      "flightId": 1,
+      "seatNo": "A1",
+      "checkIn": true,
+      "wheelChair": true,
+      "infants": false,
+      "ancillaryServices": ["Vouchers", "TV"],
+      "specialMeals": ["Veg Meal Box"],
+      "inFlightShop": ["HeadSet", "iPod"]
+    },
+    {
+      "id": 2,
+      "name": "test",
+      "passport": "P002",
+      "dateOfBirth": "1996-03-22",
+      "address": "Hyderabad",
+      "flightId": 2,
+      "seatNo": "A1",
+      "checkIn": true,
+      "wheelChair": true,
+      "infants": false,
+      "ancillaryServices": ["Vouchers", "TV"],
+      "specialMeals": ["Veg Meal Box"],
+      "inFlightShop": ["HeadSet", "iPod"]
+    }
+  ]
+}

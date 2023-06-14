@@ -1,0 +1,49 @@
+@import './variables';
+
+// Extra Small devices (300px to 575px and up)
+@mixin xsBreakPoint{
+    @media (min-width: #{$screen-xs}){   
+        @content;
+    }
+}
+// Small devices (landscape phones, 576px and up)
+@mixin smBreakPoint{
+    @media (min-width: #{$screen-sm}){   
+        @content;        
+    }
+}
+// Medium devices (tablets, 768px and up)
+@mixin mdBreakPoint{
+    @media (min-width: #{$screen-md}){   
+        @content;
+    }
+}
+// Large devices (desktops, 992px and up)
+@mixin lgBreakPoint{
+    @media (min-width: #{$screen-lg}){   
+        @content;
+    }
+}
+// X-Large devices (large desktops, 1200px and up)
+@mixin xlBreakPoint{
+    @media (min-width: #{$screen-xl}){   
+        @content;
+    }
+}
+
+// XX-Large devices (larger desktops, 1536px and upto 1920px)
+@mixin xxlBreakPoint{
+    @media (min-width: #{$screen-xxl}){   
+        @content;      
+    }
+}
+
+// XXX-Large devices (larger desktops, 1920px and up)
+@mixin maxBreakPoint{
+    @media (min-width: #{$screen-max}){   
+        @content;
+    }
+}
+
+
+
