@@ -1,0 +1,69 @@
+@import "../../assets/css/variables";
+@import "../../assets/css/mixins";
+
+.signinBgContainer {
+    background-image: url("../../../public/images/signin-banner.jpg");
+    background-repeat: no-repeat;
+    width: 100%;
+    background-size: cover;
+    height: 100vh;
+
+    .pageHeading {
+        text-align: center;
+        color: $colorWhite;
+        background-color: $colorSecondary;
+        margin-bottom: 50px;
+    }
+    .signinContainer {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .loginForm {
+            padding: 1.5rem;
+            min-width: auto;
+            @include smBreakPoint{
+                max-width: 400px;
+            }
+        }
+        .loginAvatar {
+            margin: 0px auto;
+            background-color: $colorSecondary;
+            margin-top: -40px;
+        }
+        .error{
+            color: $colorSecondary;
+        }
+        .loginText {
+            position: relative;
+            color: #4a4a4a;
+            text-align: center;
+            margin: 15px 0;
+            font-size: 18px;
+            font-weight: 700;
+            &:before {
+                position: absolute;
+                content: "";
+                width: 100%;
+                height: 3px;
+                background: #eee;
+                top: 18px;
+                left: 0;
+                z-index: 9;
+            }
+            span {
+                width: 35px;
+                height: 35px;
+                display: inline-block;
+                position: relative;
+                text-align: center;
+                background-color: #fff;
+                padding: 5px;
+                z-index: 999;
+            }
+        }
+        .link {
+            color: $colorSecondary;
+        }
+    }
+}

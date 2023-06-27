@@ -1,0 +1,21 @@
+@import "./variables";
+@import "./fonts";
+@import "./mixins";
+
+* {
+  margin: 0;
+  padding: 0; 
+  box-sizing: border-box;
+}
+html{
+  font-size:16px;
+  @include xxlBreakPoint{
+    font-size: 1.2vw;
+  } 
+}
+
+a{
+  color: $colorWhite;
+  text-decoration: none;
+}
+
