@@ -1,0 +1,109 @@
+npm install --save-dev @testing-library/react @testing-library/jest-dom redux-mock-store
+
+import React from "react";
+import { render, screen } from "@testing-library/react";
+import { Provider } from "react-redux";
+import configureStore from "redux-mock-store";
+import Flights from "./Flights";
+
+const mockStore = configureStore([]);
+
+describe("Flights component", () => {
+  test("renders without errors", () => {
+    const store = mockStore({
+      flights: {
+        loading: false,
+        error: null,
+        flights: [],
+      },
+    });
+
+    render(
+      <Provider store={store}>
+        <Flights />
+      </Provider>
+    );
+  });
+
+  test("displays 'Loading...' when flight is loading", () => {
+    const store = mockStore({
+      flights: {
+        loading: true,
+        error: null,
+        flights: [],
+      },
+    });
+
+    render(
+      <Provider store={store}>
+        <Flights />
+      </Provider>
+    );
+
+    const loadingElement = screen.getByText("Loading...");
+    expect(loadingElement).toBeInTheDocument();
+  });
+
+  test("displays error message when there's an error", () => {
+    const store = mockStore({
+      flights: {
+        loading: false,
+        error: "Error fetching flights",
+        flights: [],
+      },
+    });
+
+    render(
+      <Provider store={store}>
+        <Flights />
+      </Provider>
+    );
+
+    const errorElement = screen.getByText("Error: Error fetching flights");
+    expect(errorElement).toBeInTheDocument();
+  });
+
+  test("displays flights data correctly when flights array is not empty", () => {
+    const mockedFlights = [
+      {
+        id: 1,
+        flightNo: "ABC123",
+        airline: "Example Airline",
+        source: "City A",
+        destination: "City B",
+        depatureTime: "2023-07-19T10:00:00.000Z",
+      },
+      // Add more mocked flight data as needed
+    ];
+
+    const store = mockStore({
+      flights: {
+        loading: false,
+        error: null,
+        flights: mockedFlights,
+      },
+    });
+
+    render(
+      <Provider store={store}>
+        <Flights />
+      </Provider>
+    );
+
+    // Test if the flight data is displayed correctly, you can use "getByText" and "queryByText" functions
+    // to check if the elements are present in the DOM.
+    const flightNoElement = screen.getByText("ABC123");
+    const airlineElement = screen.getByText("Example Airline");
+    const sourceElement = screen.getByText("City A");
+    const destinationElement = screen.getByText("City B");
+    const departureDateElement = screen.getByText("2023-07-19");
+    const departureTimeElement = screen.getByText("10:00");
+
+    expect(flightNoElement).toBeInTheDocument();
+    expect(airlineElement).toBeInTheDocument();
+    expect(sourceElement).toBeInTheDocument();
+    expect(destinationElement).toBeInTheDocument();
+    expect(departureDateElement).toBeInTheDocument();
+    expect(departureTimeElement).toBeInTheDocument();
+  });
+});

@@ -1,0 +1,106 @@
+npm install @testing-library/react @testing-library/jest-dom --save-dev
+
+
+
+import React from "react";
+import { render, screen, fireEvent } from "@testing-library/react";
+import "@testing-library/jest-dom/extend-expect"; // For custom DOM matchers
+import CreatePassenger from "./CreatePassenger";
+
+jest.mock("react-redux", () => ({
+  useDispatch: () => jest.fn(),
+}));
+
+jest.mock("./passengerService", () => ({
+  addUpdatePassenger: jest.fn(),
+}));
+
+describe("CreatePassenger Component", () => {
+  it("should render without crashing", () => {
+    render(<CreatePassenger flightId="123" />);
+    const createPassengerTitle = screen.getByText("Create Passenger");
+    expect(createPassengerTitle).toBeInTheDocument();
+  });
+
+  it("should initialize state properly when provided with initialPassengerData", () => {
+    const initialPassengerData = {
+      name: "John Doe",
+      passport: "AB123456",
+      dateOfBirth: "1990-01-01",
+      address: "123 Main St",
+    };
+    render(
+      <CreatePassenger flightId="123" initialPassengerData={initialPassengerData} />
+    );
+
+    expect(screen.getByLabelText("Name")).toHaveValue("John Doe");
+    expect(screen.getByLabelText("Passport")).toHaveValue("AB123456");
+    expect(screen.getByLabelText("Date of Birth")).toHaveValue("1990-01-01");
+    expect(screen.getByLabelText("Address")).toHaveValue("123 Main St");
+  });
+
+  it("should update state when input fields are changed", () => {
+    render(<CreatePassenger flightId="123" />);
+
+    const nameInput = screen.getByLabelText("Name");
+    const passportInput = screen.getByLabelText("Passport");
+    const dateOfBirthInput = screen.getByLabelText("Date of Birth");
+    const addressInput = screen.getByLabelText("Address");
+
+    fireEvent.change(nameInput, { target: { value: "John Doe" } });
+    fireEvent.change(passportInput, { target: { value: "AB123456" } });
+    fireEvent.change(dateOfBirthInput, { target: { value: "1990-01-01" } });
+    fireEvent.change(addressInput, { target: { value: "123 Main St" } });
+
+    expect(nameInput).toHaveValue("John Doe");
+    expect(passportInput).toHaveValue("AB123456");
+    expect(dateOfBirthInput).toHaveValue("1990-01-01");
+    expect(addressInput).toHaveValue("123 Main St");
+  });
+
+  it("should dispatch addUpdatePassenger action on form submission", () => {
+    const dispatchMock = jest.fn();
+    const addUpdatePassengerMock = jest.fn();
+    jest.mock("react-redux", () => ({
+      useDispatch: () => dispatchMock,
+    }));
+    jest.mock("./passengerService", () => ({
+      addUpdatePassenger: addUpdatePassengerMock,
+    }));
+
+    render(<CreatePassenger flightId="123" />);
+    const createButton = screen.getByText("Create");
+
+    fireEvent.click(createButton);
+
+    expect(addUpdatePassengerMock).toHaveBeenCalledWith({
+      name: "",
+      passport: "",
+      dateOfBirth: "",
+      address: "",
+      flightId: "123",
+    });
+  });
+
+  it("should clear form fields on form submission", () => {
+    render(<CreatePassenger flightId="123" />);
+
+    const nameInput = screen.getByLabelText("Name");
+    const passportInput = screen.getByLabelText("Passport");
+    const dateOfBirthInput = screen.getByLabelText("Date of Birth");
+    const addressInput = screen.getByLabelText("Address");
+    const createButton = screen.getByText("Create");
+
+    fireEvent.change(nameInput, { target: { value: "John Doe" } });
+    fireEvent.change(passportInput, { target: { value: "AB123456" } });
+    fireEvent.change(dateOfBirthInput, { target: { value: "1990-01-01" } });
+    fireEvent.change(addressInput, { target: { value: "123 Main St" } });
+
+    fireEvent.click(createButton);
+
+    expect(nameInput).toHaveValue("");
+    expect(passportInput).toHaveValue("");
+    expect(dateOfBirthInput).toHaveValue("");
+    expect(addressInput).toHaveValue("");
+  });
+});

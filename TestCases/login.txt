@@ -1,0 +1,132 @@
+import React from "react";
+import { render, screen, fireEvent } from "@testing-library/react";
+import LoginPage from "./LoginPage";
+
+// Mock react-router-dom's useNavigate hook
+jest.mock("react-router-dom", () => ({
+  useNavigate: () => jest.fn(),
+}));
+
+// Mock GoogleLogin component to prevent errors during test
+jest.mock("@react-oauth/google", () => ({
+  GoogleLogin: () => <button data-testid="google-login">Google Login</button>,
+}));
+
+// Mock the toastify library for testing purposes
+jest.mock("react-toastify", () => ({
+  toast: {
+    error: jest.fn(),
+    success: jest.fn(),
+    warning: jest.fn(),
+  },
+}));
+
+// Mock the axios library for testing purposes
+jest.mock("axios", () => ({
+  get: jest.fn(),
+}));
+
+describe("LoginPage Component", () => {
+  test("renders without errors", () => {
+    render(<LoginPage />);
+    const pageTitle = screen.getByText(/Airline Check-In System/i);
+    expect(pageTitle).toBeInTheDocument();
+  });
+
+  test("validates user on form submission with empty fields", () => {
+    render(<LoginPage />);
+    const signInButton = screen.getByText(/Sign In/i);
+    fireEvent.click(signInButton);
+
+    // Check if warning messages are displayed for username and password fields
+    const usernameWarning = screen.getByText(/Please enter a username/i);
+    const passwordWarning = screen.getByText(/Please enter a password/i);
+    expect(usernameWarning).toBeInTheDocument();
+    expect(passwordWarning).toBeInTheDocument();
+
+    // The loader state should not be set, as validation fails
+    expect(screen.getByTestId("login").loader).toBeFalsy();
+  });
+
+  test("shows error toast when user enters an invalid username", async () => {
+    // Mock the axios.get method to return an empty response
+    axios.get.mockResolvedValueOnce({ data: {} });
+
+    render(<LoginPage />);
+    const usernameInput = screen.getByLabelText(/Username/i);
+    const passwordInput = screen.getByLabelText(/Password/i);
+    const signInButton = screen.getByText(/Sign In/i);
+
+    fireEvent.change(usernameInput, { target: { value: "invalid_username" } });
+    fireEvent.change(passwordInput, { target: { value: "valid_password" } });
+    fireEvent.click(signInButton);
+
+    // Wait for axios.get to be called
+    await screen.findByText("Login failed due to:");
+
+    // Check if the error toast is displayed
+    expect(toast.error).toHaveBeenCalledWith("Please enter a valid username");
+  });
+
+  test("shows error toast when user enters incorrect credentials", async () => {
+    // Mock the axios.get method to return a user with a different password
+    axios.get.mockResolvedValueOnce({
+      data: [{ username: "valid_username", password: "correct_password" }],
+    });
+
+    render(<LoginPage />);
+    const usernameInput = screen.getByLabelText(/Username/i);
+    const passwordInput = screen.getByLabelText(/Password/i);
+    const signInButton = screen.getByText(/Sign In/i);
+
+    fireEvent.change(usernameInput, { target: { value: "valid_username" } });
+    fireEvent.change(passwordInput, { target: { value: "incorrect_password" } });
+    fireEvent.click(signInButton);
+
+    // Wait for axios.get to be called
+    await screen.findByText("Login failed due to:");
+
+    // Check if the error toast is displayed
+    expect(toast.error).toHaveBeenCalledWith("Please enter valid credentials");
+  });
+
+  test("navigates to the dashboard on successful login", async () => {
+    // Mock the axios.get method to return a user with correct credentials
+    axios.get.mockResolvedValueOnce({
+      data: [{ username: "valid_username", password: "correct_password" }],
+    });
+
+    render(<LoginPage />);
+    const usernameInput = screen.getByLabelText(/Username/i);
+    const passwordInput = screen.getByLabelText(/Password/i);
+    const signInButton = screen.getByText(/Sign In/i);
+
+    fireEvent.change(usernameInput, { target: { value: "valid_username" } });
+    fireEvent.change(passwordInput, { target: { value: "correct_password" } });
+    fireEvent.click(signInButton);
+
+    // Wait for axios.get to be called
+    await screen.findByText("Login successful");
+
+    // Check if the session storage is set with the username
+    expect(sessionStorage.getItem("username")).toBe("valid_username");
+
+    // Check if the navigation to the dashboard is triggered
+    expect(useNavigate()).toHaveBeenCalledWith("/dashboard");
+  });
+
+  test("navigates to the dashboard on Google login success", async () => {
+    // Mock the GoogleLogin's onSuccess function to simulate successful login
+    const mockedOnSuccess = jest.fn();
+    const { getByTestId } = render(<LoginPage />);
+    const googleLoginButton = getByTestId("google-login");
+
+    fireEvent.click(googleLoginButton);
+
+    // Wait for onSuccess to be called
+    await screen.findByText("Google Login");
+
+    // Check if navigation to the dashboard is triggered
+    expect(useNavigate()).toHaveBeenCalledWith("/dashboard");
+  });
+});
