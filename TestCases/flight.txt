@@ -1,4 +1,64 @@
 npm install --save-dev @testing-library/react @testing-library/jest-dom redux-mock-store
+import React from "react";
+import { render, screen, waitFor } from "@testing-library/react";
+import { Provider } from "react-redux";
+import configureStore from "redux-mock-store";
+import Flights from "./Flights";
+import { fetchFlights } from "./flightService"; // Import the actual fetchFlights action creator
+
+const mockStore = configureStore([]);
+
+describe("Flights component", () => {
+  test("renders without errors", async () => {
+    const mockFlightData = [
+      {
+        id: 1,
+        flightNo: "ABC123",
+        airline: "Example Airline",
+        source: "City A",
+        destination: "City B",
+        depatureTime: "2023-07-19T10:00:00.000Z",
+      },
+      // Add more mock flight data as needed
+    ];
+
+    // Mock the resolved value of fetchFlights
+    jest.spyOn(fetchFlights, "fulfilled").mockResolvedValue(mockFlightData);
+
+    const store = mockStore({
+      flights: {
+        loading: false,
+        error: null,
+        flights: mockFlightData, // Set the flights state with mock data to skip loading state
+      },
+    });
+
+    render(
+      <Provider store={store}>
+        <Flights />
+      </Provider>
+    );
+
+    // Wait for the component to render with the resolved data
+    await waitFor(() => {
+      // Assertions
+      const flightNoElement = screen.getByText("ABC123");
+      const airlineElement = screen.getByText("Example Airline");
+      const sourceElement = screen.getByText("City A");
+      const destinationElement = screen.getByText("City B");
+      const departureDateElement = screen.getByText("2023-07-19");
+      const departureTimeElement = screen.getByText("10:00");
+
+      // Check if the elements are present in the DOM
+      expect(flightNoElement).toBeInTheDocument();
+      expect(airlineElement).toBeInTheDocument();
+      expect(sourceElement).toBeInTheDocument();
+      expect(destinationElement).toBeInTheDocument();
+      expect(departureDateElement).toBeInTheDocument();
+      expect(departureTimeElement).toBeInTheDocument();
+    });
+  });
+});
 
 import React from "react";
 import { render, screen } from "@testing-library/react";
