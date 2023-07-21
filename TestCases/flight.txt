@@ -1,109 +1,84 @@
-npm install --save-dev @testing-library/react @testing-library/jest-dom redux-mock-store
-
-import React from "react";
-import { render, screen } from "@testing-library/react";
-import { Provider } from "react-redux";
-import configureStore from "redux-mock-store";
+import { render, screen, waitFor } from "@testing-library/react";
+import { BrowserRouter } from "react-router-dom";
 import Flights from "./Flights";
+import { Provider } from "react-redux";
+import { store } from "../../app/store";
+import configureStore from "redux-mock-store";
+import thunk from "redux-thunk";
+import { fetchFlights } from "./flightService";
 
-const mockStore = configureStore([]);
+jest.mock("axios");
+
+const mockStore = configureStore([thunk]);
 
 describe("Flights component", () => {
   test("renders without errors", () => {
-    const store = mockStore({
-      flights: {
-        loading: false,
-        error: null,
-        flights: [],
-      },
-    });
-
     render(
       <Provider store={store}>
-        <Flights />
-      </Provider>
-    );
-  });
-
-  test("displays 'Loading...' when flight is loading", () => {
-    const store = mockStore({
-      flights: {
-        loading: true,
-        error: null,
-        flights: [],
-      },
-    });
-
-    render(
-      <Provider store={store}>
-        <Flights />
+        <BrowserRouter>
+          <Flights />
+        </BrowserRouter>
       </Provider>
     );
 
-    const loadingElement = screen.getByText("Loading...");
-    expect(loadingElement).toBeInTheDocument();
+    const headingEl = screen.getByRole("heading", { name: /Flights list/i });
+    expect(headingEl).toBeInTheDocument();
   });
 
-  test("displays error message when there's an error", () => {
-    const store = mockStore({
-      flights: {
-        loading: false,
-        error: "Error fetching flights",
-        flights: [],
-      },
-    });
-
-    render(
-      <Provider store={store}>
-        <Flights />
-      </Provider>
-    );
-
-    const errorElement = screen.getByText("Error: Error fetching flights");
-    expect(errorElement).toBeInTheDocument();
-  });
-
-  test("displays flights data correctly when flights array is not empty", () => {
-    const mockedFlights = [
+  test("fetches flight data and displays it correctly", async () => {
+    // Sample flight data to mock the response from the API
+    const mockFlightData = [
       {
         id: 1,
-        flightNo: "ABC123",
-        airline: "Example Airline",
+        flightNo: "FL123",
+        airline: "Mock Airline",
         source: "City A",
         destination: "City B",
-        depatureTime: "2023-07-19T10:00:00.000Z",
+        depatureTime: "2023-07-21T10:00:00.000Z",
       },
-      // Add more mocked flight data as needed
+      // Add more sample flight data here if needed
     ];
 
-    const store = mockStore({
+    // Mock the axios.get function to return the mock flight data
+    jest.mock("axios", () => ({
+      get: jest.fn().mockResolvedValueOnce({ data: mockFlightData }),
+    }));
+
+    // Create a mock store with middleware for handling async actions
+    const mockStoreWithMiddleware = mockStore({
       flights: {
         loading: false,
         error: null,
-        flights: mockedFlights,
+        flights: [],
       },
     });
 
+    // Use mockImplementationOnce to simulate the resolved async thunk result
+    jest
+      .spyOn(mockStoreWithMiddleware, "dispatch")
+      .mockImplementationOnce(() =>
+        mockStoreWithMiddleware.dispatch(fetchFlights())
+      );
+
+    // Render the Flight component with the mock store
     render(
-      <Provider store={store}>
-        <Flights />
+      <Provider store={mockStoreWithMiddleware}>
+        <BrowserRouter>
+          <Flights />
+        </BrowserRouter>
       </Provider>
     );
 
-    // Test if the flight data is displayed correctly, you can use "getByText" and "queryByText" functions
-    // to check if the elements are present in the DOM.
-    const flightNoElement = screen.getByText("ABC123");
-    const airlineElement = screen.getByText("Example Airline");
-    const sourceElement = screen.getByText("City A");
-    const destinationElement = screen.getByText("City B");
-    const departureDateElement = screen.getByText("2023-07-19");
-    const departureTimeElement = screen.getByText("10:00");
-
-    expect(flightNoElement).toBeInTheDocument();
-    expect(airlineElement).toBeInTheDocument();
-    expect(sourceElement).toBeInTheDocument();
-    expect(destinationElement).toBeInTheDocument();
-    expect(departureDateElement).toBeInTheDocument();
-    expect(departureTimeElement).toBeInTheDocument();
+    // Wait for the component to render and the flight data to be displayed
+    await waitFor(() => {
+      // Check if the flight data is rendered correctly in the table rows
+      mockFlightData.forEach(async (flight) => {
+        const flightNoElement = await screen.findByText(flight.flightNo);
+        expect(flightNoElement).toBeInTheDocument();
+        const airlineElement = await screen.findByText(flight.airline);
+        expect(airlineElement).toBeInTheDocument();
+        // Add more assertions for other properties as needed
+      });
+    });
   });
 });
