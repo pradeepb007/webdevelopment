@@ -1,0 +1,56 @@
+<template>
+  <div>
+    <h1>Employee Data</h1>
+    <a-table>
+      <!-- Render each regular row -->
+      <template #staticRowRender="{ record }">
+        <tr>
+          <td>{{ record.name }}</td>
+          <td>{{ record.position }}</td>
+          <td>{{ record.salary }}</td>
+          <td>
+            <button @click="expandRow(record)">Expand</button>
+          </td>
+        </tr>
+      </template>
+
+      <!-- Render additional content for expanded rows -->
+      <template #expandedRowRender="{ record }">
+        <tr>
+          <td colspan="4">
+            <p>Additional information for {{ record.name }}:</p>
+            <p>Email: {{ record.email }}</p>
+            <p>Department: {{ record.department }}</p>
+            <!-- Add more details as needed -->
+          </td>
+        </tr>
+      </template>
+    </a-table>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      employees: [
+        {
+          name: 'John Doe',
+          position: 'Software Engineer',
+          salary: '$80,000',
+          email: 'john@example.com',
+          department: 'Engineering',
+          expanded: false // Track whether each row is expanded or not
+        },
+        // Add more employee data here
+      ]
+    };
+  },
+  methods: {
+    expandRow(employee) {
+      // Toggle the expanded state for the clicked employee
+      employee.expanded = !employee.expanded;
+    }
+  }
+};
+</script>
