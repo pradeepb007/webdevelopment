@@ -14,7 +14,7 @@
       >
         <template v-slot="{ text, record }">
           <span v-if="showData[record.key]">
-            {{ getMonthData(record, month).One }} / {{ getMonthData(record, month).Two }}
+            {{ getMonthData(record, month)?.One }} / {{ getMonthData(record, month)?.Two }}
           </span>
         </template>
       </a-table-column>
@@ -63,7 +63,7 @@ export default defineComponent({
     };
 
     const getMonthData = (record: any, month: string) => {
-      return record.MonthsData[month];
+      return record?.MonthsData[month] || { One: null, Two: null };
     };
 
     const flattenData = computed(() => {
