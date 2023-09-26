@@ -14,7 +14,7 @@
       >
         <template v-slot="{ text, record }">
           <span v-if="showData[record.key]">
-            {{ getMonthData(record, month).One }} / {{ getMonthData(record, month).Two }}
+            {{ getMonthData(record, month)?.One }} / {{ getMonthData(record, month)?.Two }}
           </span>
         </template>
       </a-table-column>
@@ -74,9 +74,9 @@ export default defineComponent({
 
     const flattenData = computed(() => {
       // Flatten the data structure to have one row per month
-      const flattened: any[] = [];
+      const flattened: Publisher[] = [];
       this.data.forEach((publisher) => {
-        const rowData: Record<string, any> = { Name: publisher.Name, key: publisher.key };
+        const rowData: any = { Name: publisher.Name, key: publisher.key };
         this.months.forEach((month) => {
           rowData[month] = null; // Initialize columns for each month
         });
