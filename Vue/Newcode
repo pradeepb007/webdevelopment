@@ -1,0 +1,77 @@
+<template>
+  <div>
+    <a-table :data-source="flattenData">
+      <a-table-column title="Publisher Name" dataIndex="Name" key="Name">
+        <template v-slot="{ text, record }">
+          <a @click="toggleRow(record)">{{ text }}</a>
+        </template>
+      </a-table-column>
+      <a-table-column
+        v-for="month in months"
+        :key="month"
+        :title="month"
+        :data-index="month"
+      >
+        <template v-slot="{ text, record }">
+          <span v-if="showData[record.key]">
+            {{ record.MonthsData[month].One }} / {{ record.MonthsData[month].Two }}
+          </span>
+        </template>
+      </a-table-column>
+    </a-table>
+    <div v-for="(show, key) in showData" :key="key">
+      <a-checkbox v-model="show" @change="toggleData(key)">Show Months Data</a-checkbox>
+    </div>
+  </div>
+</template>
+
+<script>
+import { ATable, ACheckbox } from "ant-design-vue";
+
+export default {
+  components: {
+    ATable,
+    ACheckbox,
+  },
+  data() {
+    return {
+      data: [
+        {
+          key: 1,
+          Name: "Test name",
+          MonthsData: {
+            Jan: { One: 30, Two: 20 },
+            Feb: { One: 50, Two: 30 },
+            Mar: { One: 60, Two: 70 },
+          },
+        },
+        // Add more data objects here if needed
+      ],
+      months: ["Jan", "Feb", "Mar"], // List of month names
+      showData: {},
+    };
+  },
+  computed: {
+    flattenData() {
+      // Flatten the data structure to have one row per month
+      const flattened = [];
+      this.data.forEach((publisher) => {
+        const rowData = { Name: publisher.Name, key: publisher.key };
+        this.months.forEach((month) => {
+          rowData[month] = null; // Initialize columns for each month
+        });
+        flattened.push(rowData);
+      });
+      return flattened;
+    },
+  },
+  methods: {
+    toggleRow(record) {
+      this.$set(this.showData, record.key, !this.showData[record.key]);
+    },
+    toggleData(key) {
+      // Handle checkbox change to show/hide data
+    },
+  },
+};
+</script>
