@@ -25,10 +25,11 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent, ref, computed } from "vue";
 import { ATable, ACheckbox } from "ant-design-vue";
 
-export default {
+export default defineComponent({
   components: {
     ATable,
     ACheckbox,
@@ -48,33 +49,43 @@ export default {
         // Add more data objects here if needed
       ],
       months: ["Jan", "Feb", "Mar"], // List of month names
-      showData: {},
     };
   },
-  computed: {
-    flattenData() {
+  setup() {
+    const showData = ref<{ [key: number]: boolean }>({});
+
+    const toggleRow = (record: { key: number }) => {
+      showData.value[record.key] = !showData.value[record.key];
+    };
+
+    const toggleData = (key: number) => {
+      // Handle checkbox change to show/hide data
+    };
+
+    const getMonthData = (record: any, month: string) => {
+      return record.MonthsData[month];
+    };
+
+    const flattenData = computed(() => {
       // Flatten the data structure to have one row per month
-      const flattened = [];
+      const flattened: any[] = [];
       this.data.forEach((publisher) => {
-        const rowData = { Name: publisher.Name, key: publisher.key };
+        const rowData: any = { Name: publisher.Name, key: publisher.key };
         this.months.forEach((month) => {
           rowData[month] = null; // Initialize columns for each month
         });
         flattened.push(rowData);
       });
       return flattened;
-    },
+    });
+
+    return {
+      flattenData,
+      showData,
+      toggleRow,
+      toggleData,
+      getMonthData,
+    };
   },
-  methods: {
-    toggleRow(record) {
-      this.$set(this.showData, record.key, !this.showData[record.key]);
-    },
-    toggleData(key) {
-      // Handle checkbox change to show/hide data
-    },
-    getMonthData(record, month) {
-      return record.MonthsData[month];
-    },
-  },
-};
+});
 </script>
