@@ -1,23 +1,24 @@
 <template>
   <div>
     <a-table :data-source="data">
-      <a-column title="Publisher Name" dataIndex="Name" key="Name">
-        <template slot-scope="text, record">
+      <a-table-column title="Publisher Name" dataIndex="Name" key="Name">
+        <template v-slot="{ text, record }">
           <a @click="toggleRow(record)">{{ text }}</a>
         </template>
-      </a-column>
-      <a-column
+      </a-table-column>
+      <a-table-column
         v-for="month in data[0].MonthsName[0]"
         :key="month"
         :title="month"
         :data-index="month"
       >
-        <template slot-scope="text, record">
+        <template v-slot="{ text, record }">
           <span v-if="showData[record.key]">
-            {{ record.MonthsData[0][month].One }} / {{ record.MonthsData[0][month].Two }}
+            <a-input v-model="record.MonthsData[0][month].One" />
+            <a-input v-model="record.MonthsData[0][month].Two" />
           </span>
         </template>
-      </a-column>
+      </a-table-column>
     </a-table>
     <div v-for="(show, key) in showData" :key="key">
       <a-checkbox v-model="show" @change="toggleData(key)">Show Months Data</a-checkbox>
@@ -26,12 +27,13 @@
 </template>
 
 <script>
-import { ATable, ACheckbox } from "ant-design-vue";
+import { ATable, ACheckbox, AInput } from "ant-design-vue";
 
 export default {
   components: {
     ATable,
     ACheckbox,
+    AInput,
   },
   data() {
     return {
