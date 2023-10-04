@@ -1,25 +1,6 @@
 <template>
-  <div>
-    <input-number name="age" :rules="[{ required: true, message: 'Age is required' }]" />
-  </div>
-</template>
-
-<script>
-import { defineComponent } from 'vue';
-import InputNumber from './components/InputNumber.vue';
-
-export default defineComponent({
-  components: {
-    InputNumber,
-  },
-});
-</script>
-
-
-<template>
   <a-form-item :name="name" :rules="rules">
-    <a-input-number v-model:value="value" :min="1" :max="10" @change="validateInput" />
-    {{ value }}
+    <a-input-number v-model:value="value" :min="1" :max="10" />
   </a-form-item>
 </template>
 
@@ -34,23 +15,40 @@ export default defineComponent({
   setup(props) {
     const value = ref(3);
 
-    const validateInput = () => {
-      // Clear the error message when the input changes
-      if (props.rules.some(rule => rule.required)) {
-        props.rules.forEach(rule => {
-          if (rule.required && !value.value) {
-            rule.message = 'Age is required';
-          } else {
-            rule.message = '';
-          }
-        });
-      }
-    };
-
     return {
       value,
-      validateInput,
     };
   },
 });
 </script>
+
+<template>
+  <div>
+    <input-number name="age" :rules="[{ required: true, message: 'Age is required' }]" />
+    <p v-if="formErrors.age">{{ formErrors.age }}</p>
+  </div>
+</template>
+
+<script>
+import { defineComponent, ref } from 'vue';
+import InputNumber from './components/InputNumber.vue';
+
+export default defineComponent({
+  components: {
+    InputNumber,
+  },
+  setup() {
+    const formErrors = ref({});
+
+    // Handle form submission and validation here
+    // Set formErrors based on validation results
+
+    return {
+      formErrors,
+    };
+  },
+});
+</script>
+
+
+
