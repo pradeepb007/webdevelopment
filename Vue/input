@@ -1,0 +1,34 @@
+<template>
+  <a-form-item :name="name" :rules="rules">
+    <a-input-number id="inputNumber" v-model:value="value" :min="1" :max="10" @change="clearError" />
+    {{ value }}
+  </a-form-item>
+</template>
+
+<script>
+import { defineComponent, ref } from 'vue';
+
+export default defineComponent({
+  props: {
+    name: String,
+    rules: Array,
+  },
+  setup(props) {
+    const value = ref(3);
+
+    const clearError = () => {
+      // Clear the error message when the input changes
+      props.rules.forEach(rule => {
+        if (rule.required && !value.value) {
+          rule.message = '';
+        }
+      });
+    };
+
+    return {
+      value,
+      clearError,
+    };
+  },
+});
+</script>
