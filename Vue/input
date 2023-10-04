@@ -50,5 +50,53 @@ export default defineComponent({
 });
 </script>
 
+<template>
+  <a-form-item :name="name" :rules="rules">
+    <a-input-number v-model:value="value" :min="1" :max="10" @change="clearError" />
+    <p v-if="showError">{{ errorMessage }}</p>
+  </a-form-item>
+</template>
+
+<script>
+import { defineComponent, ref, computed } from 'vue';
+
+export default defineComponent({
+  props: {
+    name: String,
+    rules: Array,
+  },
+  setup(props) {
+    const value = ref(3);
+
+    const showError = computed(() => {
+      return !!props.rules.find(rule => rule.required) && !value.value;
+    });
+
+    const errorMessage = computed(() => {
+      const requiredRule = props.rules.find(rule => rule.required);
+      return showError.value && requiredRule ? requiredRule.message : '';
+    });
+
+    const clearError = () => {
+      // Clear the error message when the input changes
+      if (props.rules.some(rule => rule.required)) {
+        if (!value.value) {
+          errorMessage.value = 'Age is required';
+        } else {
+          errorMessage.value = '';
+        }
+      }
+    };
+
+    return {
+      value,
+      showError,
+      errorMessage,
+      clearError,
+    };
+  },
+});
+</script>
+
 
 
