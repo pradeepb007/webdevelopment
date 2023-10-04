@@ -1,6 +1,24 @@
 <template>
+  <div>
+    <input-number name="age" :rules="[{ required: true, message: 'Age is required' }]" />
+  </div>
+</template>
+
+<script>
+import { defineComponent } from 'vue';
+import InputNumber from './components/InputNumber.vue';
+
+export default defineComponent({
+  components: {
+    InputNumber,
+  },
+});
+</script>
+
+
+<template>
   <a-form-item :name="name" :rules="rules">
-    <a-input-number id="inputNumber" v-model:value="value" :min="1" :max="10" @change="clearError" />
+    <a-input-number v-model:value="value" :min="1" :max="10" @change="validateInput" />
     {{ value }}
   </a-form-item>
 </template>
@@ -16,18 +34,22 @@ export default defineComponent({
   setup(props) {
     const value = ref(3);
 
-    const clearError = () => {
+    const validateInput = () => {
       // Clear the error message when the input changes
-      props.rules.forEach(rule => {
-        if (rule.required && !value.value) {
-          rule.message = '';
-        }
-      });
+      if (props.rules.some(rule => rule.required)) {
+        props.rules.forEach(rule => {
+          if (rule.required && !value.value) {
+            rule.message = 'Age is required';
+          } else {
+            rule.message = '';
+          }
+        });
+      }
     };
 
     return {
       value,
-      clearError,
+      validateInput,
     };
   },
 });
