@@ -51,10 +51,16 @@ function App() {
     setTableData(newData);
   };
 
+  const handleAddRow = () => {
+    const newRow = Array(tableData[0].length).fill('');
+    setTableData([...tableData, newRow]);
+  };
+
   return (
     <div>
       <input type="file" onChange={handleExcelUpload} />
       <button onClick={handleExcelDownload}>Download Excel</button>
+      <button onClick={handleAddRow}>Add Row</button>
       <table>
         <tbody>
           {tableData.map((row, rowIndex) => (
