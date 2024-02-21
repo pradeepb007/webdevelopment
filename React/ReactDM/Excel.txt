@@ -1,0 +1,57 @@
+import React, { useState } from 'react';
+import XLSX from 'xlsx';
+
+function App() {
+  const [tableData, setTableData] = useState([]);
+
+  const handleExcelUpload = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onload = (evt) => {
+      const bstr = evt.target.result;
+      const workbook = XLSX.read(bstr, { type: 'binary' });
+      const sheetName = workbook.SheetNames[0];
+      const sheet = workbook.Sheets[sheetName];
+      const data = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+      setTableData(data);
+    };
+    reader.readAsBinaryString(file);
+  };
+
+  const handleExcelDownload = () => {
+    const worksheet = XLSX.utils.aoa_to_sheet(tableData);
+    const newWorkbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(newWorkbook, worksheet, 'Sheet1');
+    XLSX.writeFile(newWorkbook, 'table_data.xlsx');
+  };
+
+  return (
+    <div>
+      <input type="file" onChange={handleExcelUpload} />
+      <button onClick={handleExcelDownload}>Download Excel</button>
+      <table>
+        <tbody>
+          {tableData.map((row, rowIndex) => (
+            <tr key={rowIndex}>
+              {row.map((cell, cellIndex) => (
+                <td key={cellIndex}>
+                  <input
+                    type="text"
+                    value={cell}
+                    onChange={(e) => {
+                      const newData = [...tableData];
+                      newData[rowIndex][cellIndex] = e.target.value;
+                      setTableData(newData);
+                    }}
+                  />
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+export default App;
