@@ -54,6 +54,7 @@ function App() {
   const handleAddRow = () => {
     const newRow = Array(tableData[0].length).fill('');
     setTableData([...tableData, newRow]);
+    setEditableRowIndex(tableData.length); // Set the index of the new row to be editable
   };
 
   return (
