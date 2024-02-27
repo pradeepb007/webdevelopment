@@ -1,0 +1,81 @@
+<template>
+  <a-table :columns="columns" :data-source="data" :row-key="(record) => record.Name" :expandable="expandableConfig">
+    <template #MonthsData="{ record }">
+      <a-table
+        :columns="innerColumns"
+        :data-source="record.MonthsData[0]"
+        :row-key="(record) => record.One"
+      ></a-table>
+    </template>
+  </a-table>
+</template>
+
+<script lang="ts">
+import { defineComponent } from 'vue';
+
+interface DataItem {
+  Name: string;
+  MonthsName: string[][];
+  MonthsData: Array<Array<{ One: number; Two: number }>>;
+}
+
+export default defineComponent({
+  data() {
+    return {
+      data: [
+        {
+          Name: "Test name",
+          MonthsName: [["Jan", "Feb", "Mar"]],
+          MonthsData: [
+            [
+              { One: 30, Two: 20 },
+              { One: 50, Two: 30 },
+              { One: 60, Two: 70 },
+            ],
+          ],
+        },
+      ],
+      columns: [
+        {
+          title: "Name",
+          dataIndex: "Name",
+          key: "Name",
+        },
+        {
+          title: "Months Name",
+          dataIndex: "MonthsName",
+          key: "MonthsName",
+        },
+        {
+          title: "Months Data",
+          dataIndex: "MonthsData",
+          key: "MonthsData",
+          customRender: "MonthsData",
+        },
+      ],
+      innerColumns: [
+        {
+          title: "One",
+          dataIndex: "One",
+          key: "One",
+        },
+        {
+          title: "Two",
+          dataIndex: "Two",
+          key: "Two",
+        },
+      ],
+      expandableConfig: {
+        expandedRowRender: (record: { One: number; Two: number }) => {
+          return (
+            <div>
+              <p>One: {record.One}</p>
+              <p>Two: {record.Two}</p>
+            </div>
+          );
+        },
+      },
+    };
+  },
+});
+</script>
