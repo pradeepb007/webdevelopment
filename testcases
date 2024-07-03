@@ -1,0 +1,53 @@
+// CountrySlice.test.js
+
+import { configureStore } from '@reduxjs/toolkit';
+import { CountrySlice } from './CountrySlice';
+import { fetchCountryAndState } from './CountrySlice';
+import { getCountries } from './api/api';
+
+jest.mock('./api/api', () => ({
+  getCountries: jest.fn(),
+}));
+
+describe('CountrySlice', () => {
+  let store;
+
+  beforeEach(() => {
+    store = configureStore({
+      reducer: { countryData: CountrySlice.reducer },
+    });
+  });
+
+  it('should return initial state', () => {
+    expect(store.getState().countryData).toEqual({
+      countryData: {},
+      countryOptions: [],
+      isLoading: false,
+      error: null,
+    });
+  });
+
+  it('should handle fetchCountryAndState pending', async () => {
+    getCountries.mockReturnValue(Promise.resolve({ countries: [] }));
+    store.dispatch(fetchCountryAndState('custID'));
+    expect(store.getState().countryData.isLoading).toBe(true);
+    expect(store.getState().countryData.error).toBe(null);
+  });
+
+  it('should handle fetchCountryAndState fulfilled', async () => {
+    const countries = [{ id: 1, name: 'USA' }, { id: 2, name: 'Canada' }];
+    getCountries.mockReturnValue(Promise.resolve({ countries }));
+    await store.dispatch(fetchCountryAndState('custID'));
+    expect(store.getState().countryData.isLoading).toBe(false);
+    expect(store.getState().countryData.countryData).toEqual(countries);
+    expect(store.getState().countryData.countryOptions).toEqual(['USA', 'Canada']);
+  });
+
+  it('should handle fetchCountryAndState rejected', async () => {
+    const error = new Error('Failed to fetch countries');
+    getCountries.mockReturnValue(Promise.reject(error));
+    await store.dispatch(fetchCountryAndState('custID'));
+    expect(store.getState().countryData.isLoading).toBe(false);
+    expect(store.getState().countryData.error).toBe(error.message);
+  });
+});
