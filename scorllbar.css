@@ -1,0 +1,62 @@
+The CSS I provided earlier is specific to WebKit browsers (such as Chrome and Safari). To make it work in Mozilla (Firefox), IE, and Safari, you can use the following CSS:
+```
+/* Firefox */
+scrollbar {
+  width: 12px;
+  height: 12px;
+  border-radius: 16px;
+  background-color: #f5f5f5;
+}
+
+scrollbar thumb {
+  border-radius: 16px;
+  background-color: #666;
+  border: 2px solid #fff;
+}
+
+scrollbar corner {
+  border-radius: 16px;
+  background-color: #f5f5f5;
+}
+
+/* IE */
+::-ms-scrollbar {
+  width: 12px;
+  height: 12px;
+  border-radius: 16px;
+  background-color: #f5f5f5;
+}
+
+::-ms-scrollbar-thumb {
+  border-radius: 16px;
+  background-color: #666;
+  border: 2px solid #fff;
+}
+
+::-ms-scrollbar-corner {
+  border-radius: 16px;
+  background-color: #f5f5f5;
+}
+
+/* Safari */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+  border-radius: 16px;
+  background-color: #f5f5f5;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 16px;
+  background-color: #666;
+  border: 2px solid #fff;
+}
+
+::-webkit-scrollbar-corner {
+  border-radius: 16px;
+  background-color: #f5f5f5;
+}
+```
+This CSS uses the `scrollbar` pseudo-element for Firefox, `::-ms-scrollbar` for IE, and `::-webkit-scrollbar` for Safari. Each section is identical, with the same styles applied to the scrollbar, thumb, and corner.
+
+Please note that IE supports scrollbar styling only from version 11 onwards. Also, the styles may not work exactly the same way in all browsers due to differences in their rendering engines.
