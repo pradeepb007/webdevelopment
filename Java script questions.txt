@@ -1,4 +1,4 @@
-Array MethodsHow does the map() method work in JavaScript?The map() method creates a new array populated with the results of calling a provided function on every element in the calling array.const numbers = [1, 2, 3, 4, 5];
+uuArray MethodsHow does the map() method work in JavaScript?The map() method creates a new array populated with the results of calling a provided function on every element in the calling array.const numbers = [1, 2, 3, 4, 5];
 const doubled = numbers.map(num => num * 2);
 console.log(doubled); // [2, 4, 6, 8, 10]What is the difference between forEach() and map()?forEach() executes a provided function once for each array element, but does not return a new array. map() executes a provided function once for each array element and returns a new array with the results.const numbers = [1, 2, 3, 4, 5];
 numbers.forEach(num => console.log(num * 2)); // 2, 4, 6, 8, 10
@@ -19,3 +19,83 @@ console.log(str.slice(0, 5));     // "Hello"How do you use the replace() method 
 const newStr = str.replace("World", "Universe");
 console.log(newStr); // "Hello Universe"What does the includes() method do in JavaScript?The includes() method determines whether one string may be found within another string, returning true or false as appropriate.const str = "Hello World";
 console.log(str.includes("World")); // trueThese questions and examples should give experienced professionals a solid understanding of fundamental JavaScript array and string methods, often asked in technical interviews.
+
+Debouncing and ThrottlingDebouncing:Debouncing is a technique to limit the rate at which a function is executed. It ensures that a function is only called once after a specified period of time has elapsed since the last call.Example:A common use case for debouncing is handling search input in a search bar to avoid making API calls on every keystroke.function debounce(func, delay) {
+  let debounceTimer;
+  return function (...args) {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => func.apply(this, args), delay);
+  };
+}
+
+const handleSearch = debounce((event) => {
+  console.log('Searching for:', event.target.value);
+}, 300);
+
+document.getElementById('searchInput').addEventListener('input', handleSearch);Throttling:Throttling ensures that a function is called at most once in a specified period. It prevents a function from being called too frequently.Example:Throttling can be used for optimizing scroll events to improve performance.function throttle(func, limit) {
+  let lastFunc;
+  let lastRan;
+  return function (...args) {
+    if (!lastRan) {
+      func.apply(this, args);
+      lastRan = Date.now();
+    } else {
+      clearTimeout(lastFunc);
+      lastFunc = setTimeout(() => {
+        if ((Date.now() - lastRan) >= limit) {
+          func.apply(this, args);
+          lastRan = Date.now();
+        }
+      }, limit - (Date.now() - lastRan));
+    }
+  };
+}
+
+const handleScroll = throttle(() => {
+  console.log('Scroll event triggered');
+}, 1000);
+
+window.addEventListener('scroll', handleScroll);Shallow Copy and Deep CopyShallow Copy:A shallow copy of an object is a copy of the object, but the nested objects are shared between the original and the copy. Changes to nested objects will affect both the original and the copied object.Example:Using Object.assign() or the spread operator (...) to create a shallow copy.const original = { a: 1, b: { c: 2 } };
+const shallowCopy = { ...original };
+
+shallowCopy.b.c = 3;
+
+console.log(original.b.c); // 3
+console.log(shallowCopy.b.c); // 3Deep Copy:A deep copy of an object creates a copy of the object and recursively copies all nested objects. Changes to nested objects do not affect the original object.Example:Using JSON.parse(JSON.stringify()) for a simple deep copy.const original = { a: 1, b: { c: 2 } };
+const deepCopy = JSON.parse(JSON.stringify(original));
+
+deepCopy.b.c = 3;
+
+console.log(original.b.c); // 2
+console.log(deepCopy.b.c); // 3Note:JSON.parse(JSON.stringify()) has limitations, such as not copying functions, undefined, or special objects like Date and RegExp. For more complex objects, a deep copy utility function is required.Example using a custom deep copy function:function deepCopy(obj) {
+  if (obj === null || typeof obj !== 'object') {
+    return obj;
+  }
+
+  if (Array.isArray(obj)) {
+    const arrCopy = [];
+    for (const item of obj) {
+      arrCopy.push(deepCopy(item));
+    }
+    return arrCopy;
+  }
+
+  const objCopy = {};
+  for (const key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      objCopy[key] = deepCopy(obj[key]);
+    }
+  }
+  return objCopy;
+}
+
+const original = { a: 1, b: { c: 2 }, d: [3, 4, { e: 5 }] };
+const deepCopyObj = deepCopy(original);
+
+deepCopyObj.b.c = 3;
+deepCopyObj.d[2].e = 6;
+
+console.log(original.b.c); // 2
+console.log(original.d[2].e); // 5
+console.log(deepCopyObj.b.c); // 3
+console.log(deepCopyObj.d[2].e); // 6These examples demonstrate how to implement debouncing, throttling, and both shallow and deep copies in JavaScript.
