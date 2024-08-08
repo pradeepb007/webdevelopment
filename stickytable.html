@@ -1,0 +1,113 @@
+<style>
+.table-container {
+  overflow-x: auto; /* Add horizontal scrollbar */
+  max-width: 100%; /* Ensure the container does not exceed its parent width */
+}
+
+.custom-table {
+  width: 100%; /* Make the table 100% width */
+  border-collapse: collapse;
+}
+
+.custom-table th,
+.custom-table td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: left;
+  position: relative;
+}
+
+/* Hide the last column by default */
+.custom-table th:last-child,
+.custom-table td:last-child {
+  display: none;
+}
+
+/* Show the last column on row hover */
+.custom-table tbody tr:hover td:last-child {
+  display: table-cell;
+  position: absolute;
+  right: 0;
+  background-color: white;
+  border-left: 1px solid #ddd;
+  z-index: 1; /* Ensure it appears above other columns */
+}
+
+/* Ensure the header is also shown correctly */
+.custom-table thead th:last-child {
+  position: sticky;
+  top: 0;
+  background-color: white;
+  z-index: 2; /* Ensure it appears above other rows */
+}
+
+
+
+</style>
+
+<div class="table-container">
+  <table class="custom-table">
+    <thead>
+      <tr>
+        <th>Column 1</th>
+        <th>Column 2</th>
+        <th>Column 3</th>
+        <th>Column 4</th>
+         <th>Column 1</th>
+        <th>Column 2</th>
+        <th>Column 3</th>
+        <th>Column 4</th>
+         <th>Column 1</th>
+        <th>Column 2</th>
+        <th>Column 3</th>
+        <th>Column 4</th>
+         <th>Column 1</th>
+        <th>Column 2</th>
+        <th>Column 3</th>
+        <th>Column 4</th>
+        <th class="sticky-column">Column 5</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Row 1 Data 1</td>
+        <td>Row 1 Data 2</td>
+        <td>Row 1 Data 3</td>
+        <td>Row 1 Data 4</td>
+         <td>Row 1 Data 1</td>
+        <td>Row 1 Data 2</td>
+        <td>Row 1 Data 3</td>
+        <td>Row 1 Data 4</td>
+          <td>Row 1 Data 1</td>
+        <td>Row 1 Data 2</td>
+        <td>Row 1 Data 3</td>
+        <td>Row 1 Data 4</td>
+         <td>Row 1 Data 1</td>
+        <td>Row 1 Data 2</td>
+        <td>Row 1 Data 3</td>
+        <td>Row 1 Data 4</td>
+        <td class="sticky-column">Row 1 Data 5</td>
+      </tr>
+      <tr>
+        <td>Row 2 Data 1</td>
+        <td>Row 2 Data 2</td>
+        <td>Row 2 Data 3</td>
+        <td>Row 2 Data 4</td>
+         <td>Row 2 Data 1</td>
+        <td>Row 2 Data 2</td>
+        <td>Row 2 Data 3</td>
+        <td>Row 2 Data 4</td>
+          <td>Row 1 Data 1</td>
+        <td>Row 1 Data 2</td>
+        <td>Row 1 Data 3</td>
+        <td>Row 1 Data 4</td>
+         <td>Row 1 Data 1</td>
+        <td>Row 1 Data 2</td>
+        <td>Row 1 Data 3</td>
+        <td>Row 1 Data 4</td>
+        <td class="sticky-column">Row 2 Data 5</td>
+      </tr>
+      <!-- Add more rows as needed -->
+    </tbody>
+  </table>
+</div>
