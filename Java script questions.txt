@@ -1,0 +1,21 @@
+Array MethodsHow does the map() method work in JavaScript?The map() method creates a new array populated with the results of calling a provided function on every element in the calling array.const numbers = [1, 2, 3, 4, 5];
+const doubled = numbers.map(num => num * 2);
+console.log(doubled); // [2, 4, 6, 8, 10]What is the difference between forEach() and map()?forEach() executes a provided function once for each array element, but does not return a new array. map() executes a provided function once for each array element and returns a new array with the results.const numbers = [1, 2, 3, 4, 5];
+numbers.forEach(num => console.log(num * 2)); // 2, 4, 6, 8, 10
+const doubled = numbers.map(num => num * 2);
+console.log(doubled); // [2, 4, 6, 8, 10]Explain the filter() method and provide an example.The filter() method creates a new array with all elements that pass the test implemented by the provided function.const numbers = [1, 2, 3, 4, 5];
+const evenNumbers = numbers.filter(num => num % 2 === 0);
+console.log(evenNumbers); // [2, 4]How does the reduce() method work? Provide an example.The reduce() method executes a reducer function on each element of the array, resulting in a single output value.const numbers = [1, 2, 3, 4, 5];
+const sum = numbers.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+console.log(sum); // 15What is the purpose of the find() method in JavaScript?The find() method returns the value of the first element in the provided array that satisfies the provided testing function.const numbers = [1, 2, 3, 4, 5];
+const found = numbers.find(num => num > 3);
+console.log(found); // 4String MethodsExplain the split() method with an example.The split() method divides a string into an ordered list of substrings, puts these substrings into an array, and returns the array.const str = "Hello World";
+const words = str.split(" ");
+console.log(words); // ["Hello", "World"]How does the join() method work?The join() method creates and returns a new string by concatenating all of the elements in an array (or an array-like object), separated by commas or a specified separator string.const words = ["Hello", "World"];
+const str = words.join(" ");
+console.log(str); // "Hello World"What is the substring() method and how is it different from slice()?The substring() method returns the part of the string between the start and end indexes, or to the end of the string.The slice() method extracts a section of a string and returns it as a new string, without modifying the original string.const str = "Hello World";
+console.log(str.substring(0, 5)); // "Hello"
+console.log(str.slice(0, 5));     // "Hello"How do you use the replace() method in JavaScript?The replace() method returns a new string with some or all matches of a pattern replaced by a replacement. The pattern can be a string or a RegExp, and the replacement can be a string or a function to be called for each match.const str = "Hello World";
+const newStr = str.replace("World", "Universe");
+console.log(newStr); // "Hello Universe"What does the includes() method do in JavaScript?The includes() method determines whether one string may be found within another string, returning true or false as appropriate.const str = "Hello World";
+console.log(str.includes("World")); // trueThese questions and examples should give experienced professionals a solid understanding of fundamental JavaScript array and string methods, often asked in technical interviews.
